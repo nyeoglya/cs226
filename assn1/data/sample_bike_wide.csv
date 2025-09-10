@@ -1,0 +1,7 @@
+station_id,station_name,date,tz,h08,h09,h10,h11,h12,h13,h14,h15,h16,h17,h18
+001,Waterloo,2025-03-29,Europe/London,12,15,18,20,22,25,23,21,19,17,14
+001,Waterloo,2025-03-30,Europe/London,10,14,17,19,NA,24,22,20,18,15,12
+002,Kings Cross,2025-03-29,Europe/London,5,7,9,12,14,16,15,13,,8,6
+002,Kings Cross,2025-03-30,Europe/London,4,6,8,11,13,15,14,12,9,7,5
+A10,Canary Wharf,2025-03-29,Europe/London,20,22,,26,28,30,29,27,25,23,21
+A10,Canary Wharf,2025-03-30,Europe/London,18,20,22,24,26,28,27,25,23,21,19
