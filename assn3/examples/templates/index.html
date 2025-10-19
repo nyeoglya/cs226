@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8">
+    <title>DiskANN + CLIP Search</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <style>
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+            margin: 24px;
+        }
+
+        h1 {
+            margin-bottom: 8px;
+        }
+
+        form {
+            display: grid;
+            gap: 12px;
+            max-width: 720px;
+            margin-bottom: 24px;
+        }
+
+        .row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        input[type=text] {
+            flex: 1;
+            padding: 10px 12px;
+            font-size: 16px;
+        }
+
+        input[type=file] {
+            font-size: 14px;
+        }
+
+        button {
+            padding: 10px 14px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+        }
+
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            padding: 12px;
+        }
+
+        .muted {
+            color: #666;
+            font-size: 14px;
+        }
+
+        img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            display: block;
+        }
+
+        pre {
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>DiskANN + CLIP Search</h1>
+    <p class="muted">텍스트 → 이미지 / 이미지 → 텍스트 검색 데모</p>
+    <form method="POST" enctype="multipart/form-data" action="{{ url_for('search') }}">
+        <div class="row">
+            <input type="text" name="query_text" placeholder="텍스트를 입력하세요" value="{{ query_text or '' }}">
+            <button type="submit" name="action" value="t2i">텍스트로 이미지 검색</button>
+        </div>
+        <div class="row">
+            <input type="file" name="query_image" accept="image/*">
+            <button type="submit" name="action" value="i2t">이미지로 텍스트 검색</button>
+        </div>
+    </form>
+
+    {% if t2i_results %}
+    <h2>텍스트 → 이미지 결과</h2>
+    <div class="cards">
+        {% for item in t2i_results %}
+        <div class="card">
+            <img src="{{ url_for('media_image', item_id=item.id) }}" alt="{{ '%06d'|format(item.id) }}">
+            <div class="muted">id={{ item.id }} | distance={{ '%.6f'|format(item.distance) }}</div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if i2t_results %}
+    <h2>이미지 → 텍스트 결과</h2>
+    <div class="cards">
+        {% for item in i2t_results %}
+        <div class="card">
+            <div class="muted">id={{ item.id }} | distance={{ '%.6f'|format(item.distance) }}</div>
+            <pre>{{ item.text }}</pre>
+            <a class="muted" href="{{ url_for('media_text', item_id=item.id) }}" target="_blank">원문 보기</a>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</body>
+
+</html>
